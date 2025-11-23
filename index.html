@@ -16,6 +16,8 @@
             --border: #e0e0e0;
             --input-bg: #ffffff;
             --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --success: #28a745;
+            --linkedin: #0077b5;
         }
 
         [data-theme="dark"] {
@@ -29,41 +31,106 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 20px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
 
         header { text-align: center; margin-bottom: 25px; width: 100%; max-width: 600px; position: relative; }
-        h1 { color: var(--primary); font-weight: 700; margin-bottom: 5px; font-size: 1.8rem; }
+        
+        h1 { 
+            color: var(--primary); 
+            font-weight: 700; 
+            margin-bottom: 5px; 
+            font-size: 1.8rem; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; 
+        }
+
+        /* LinkedIn Link Styles */
+        .linkedin-corner-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: var(--linkedin);
+            font-size: 1.7rem;
+            padding: 8px;
+            text-decoration: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+        .linkedin-corner-btn:hover {
+            background-color: var(--border);
+            transform: scale(1.1);
+        }
+
         h3 { color: var(--text-secondary); font-weight: 400; font-size: 1.1rem; }
 
         .theme-toggle { position: absolute; top: 0; right: 0; background: none; border: none; color: var(--text); font-size: 1.4rem; cursor: pointer; padding: 8px; border-radius: 50%; }
         .theme-toggle:hover { background-color: var(--border); }
 
-        .container { background-color: var(--surface); padding: 30px; border-radius: 16px; box-shadow: var(--shadow); width: 100%; max-width: 500px; border: 1px solid var(--border); }
+        .container { background-color: var(--surface); padding: 30px; border-radius: 16px; box-shadow: var(--shadow); width: 100%; max-width: 500px; border: 1px solid var(--border); position: relative; }
 
-        /* Tabs */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: var(--text);
+            color: var(--bg);
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 10;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
         .tabs { display: flex; gap: 5px; margin-bottom: 25px; background-color: var(--bg); padding: 5px; border-radius: 10px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-        .tabs::-webkit-scrollbar { display: none; } /* Hide scrollbar */
+        .tabs::-webkit-scrollbar { display: none; } 
         .tab { flex: 1; text-align: center; padding: 12px; border-radius: 8px; border: none; background: none; cursor: pointer; color: var(--text-secondary); font-weight: 600; font-size: 0.9rem; white-space: nowrap; min-width: 80px; }
         .tab.active { background-color: var(--surface); color: var(--primary); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 
-        /* Form & Inputs */
         .form-group { margin-bottom: 20px; display: grid; grid-template-columns: 1fr 100px; gap: 15px; align-items: center; animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         
         label { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; display: block; }
         .sub-label { font-size: 0.75rem; color: var(--text-secondary); }
         
-        input[type="number"], select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background-color: var(--input-bg); color: var(--text); font-size: 1rem; outline: none; text-align: center; appearance: none; } /* appearance none removes default styling on iOS */
+        input[type="number"], select { 
+            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background-color: var(--input-bg); color: var(--text); font-size: 1rem; outline: none; text-align: center; appearance: none; 
+            user-select: text; 
+            -webkit-user-select: text;
+        }
         input[type="number"]:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(227, 30, 36, 0.15); }
 
-        /* CGPA Specific Styles */
         .cgpa-adder { display: grid; grid-template-columns: 1fr 1fr auto; gap: 10px; margin-bottom: 20px; align-items: center; }
         .cgpa-list { margin-bottom: 20px; border-top: 1px solid var(--border); }
         .cgpa-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); animation: fadeIn 0.3s ease; }
         .btn-add { background-color: var(--text); color: var(--bg); border: none; padding: 12px; border-radius: 8px; cursor: pointer; min-width: 44px; }
         .btn-delete { color: var(--primary); background: none; border: none; cursor: pointer; padding: 8px; font-size: 1.1rem; }
 
-        /* Action Buttons */
         .btn-container { display: flex; gap: 15px; margin-top: 30px; }
         button.action-btn { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-calc { background-color: var(--primary); color: white; }
@@ -71,7 +138,6 @@
         .btn-reset { background-color: transparent; border: 1px solid var(--border); color: var(--text); }
         .btn-reset:hover { background-color: var(--bg); }
 
-        /* Results */
         .result-modal { margin-top: 25px; padding: 20px; background-color: rgba(227, 30, 36, 0.05); border-radius: 12px; border-left: 4px solid var(--primary); display: none; animation: fadeIn 0.4s ease; }
         .result-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1.1rem; }
         .total-row { font-weight: 800; font-size: 1.4rem; color: var(--primary); margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.1); }
@@ -79,33 +145,14 @@
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MOBILE RESPONSIVE FIXES --- */
         @media (max-width: 480px) {
             body { padding: 15px 10px; }
             .container { padding: 20px; }
             h1 { font-size: 1.5rem; }
-            
-            /* Stack form inputs vertically on small screens */
-            .form-group { 
-                grid-template-columns: 1fr; 
-                gap: 8px; 
-                margin-bottom: 15px;
-            }
-            
-            /* Make input text alignment natural (left) for stacked layout, or keep center */
+            .form-group { grid-template-columns: 1fr; gap: 8px; margin-bottom: 15px; }
             .label-group { display: flex; justify-content: space-between; align-items: baseline; }
-            
-            /* Stack buttons if screen is very narrow */
-            .btn-container {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            /* CGPA Mobile Tweaks */
-            .cgpa-adder {
-                grid-template-columns: 1fr 1fr; 
-                /* The Add button takes full width on next row */
-            }
+            .btn-container { flex-direction: column; gap: 10px; }
+            .cgpa-adder { grid-template-columns: 1fr 1fr; }
             .btn-add { grid-column: span 2; }
         }
     </style>
@@ -113,7 +160,12 @@
 <body>
 
     <header>
-        <h1>Chandigarh University</h1>
+        <a href="https://linkedin.com/in/siddharthachaurasia" target="_blank" class="linkedin-corner-btn" title="Connect on LinkedIn">
+            <i class="fab fa-linkedin"></i>
+        </a>
+        <h1>
+            Chandigarh University
+        </h1>
         <h3 id="subtitle">Score Calculator</h3>
         <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
             <i class="fas fa-moon"></i>
@@ -128,15 +180,14 @@
             <button class="tab" onclick="switchMode('cgpa')" id="tab-cgpa">CGPA</button>
         </div>
 
-        <div id="calculator-body">
-            </div>
+        <div id="calculator-body"></div>
 
         <div class="btn-container">
             <button type="button" class="action-btn btn-reset" onclick="resetCurrentMode()">
                 <i class="fas fa-rotate-right"></i> Reset
             </button>
             <button type="button" class="action-btn btn-calc" onclick="calculateCurrentMode()">
-                <i class="fas fa-calculator"></i> Calculate
+                <i class="fas fa-calculator"></i> Calculate & Save
             </button>
         </div>
 
@@ -153,8 +204,22 @@
         </div>
     </div>
 
+    <div id="toast">Data Saved Successfully!</div>
+
     <script>
-        // --- Configuration for Standard Score Modes ---
+        // --- SECURITY ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('keydown', function(e) {
+            if(e.key === 'F12' || e.keyCode === 123) { e.preventDefault(); return false; }
+            if(e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.keyCode === 73)) { e.preventDefault(); return false; }
+            if(e.ctrlKey && e.shiftKey && (e.key === 'J' || e.key === 'j' || e.keyCode === 74)) { e.preventDefault(); return false; }
+            if(e.ctrlKey && e.shiftKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67)) { e.preventDefault(); return false; }
+            if(e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) { e.preventDefault(); return false; }
+        });
+
+        // --- CONFIGURATION ---
+        const DB_KEY = 'cu_calculator_db_v1'; 
+
         const standardConfigs = {
             hybrid: {
                 name: "Hybrid Score Calculator",
@@ -196,19 +261,79 @@
             }
         };
 
-        // --- CGPA Data ---
         const gradePoints = { 'A+': 10, 'A': 9, 'B+': 8, 'B': 7, 'C+': 6, 'C': 5, 'D+': 4, 'E': 0, 'F': 0, 'I': 0, 'X': 0 };
         let cgpaSubjects = [];
         let currentMode = 'hybrid';
 
-        // --- Switch Logic ---
+        // --- DATABASE FUNCTIONS ---
+        function loadDatabase() {
+            const dataStr = localStorage.getItem(DB_KEY);
+            if (dataStr) {
+                return JSON.parse(dataStr);
+            }
+            return { hybrid: {}, theory: {}, practical: {}, cgpa: [] };
+        }
+
+        function saveToDatabase() {
+            const db = loadDatabase();
+            
+            if (currentMode === 'cgpa') {
+                db.cgpa = cgpaSubjects;
+            } else {
+                const config = standardConfigs[currentMode];
+                const values = {};
+                config.fields.forEach(f => {
+                    values[f.id] = document.getElementById(f.id).value;
+                });
+                db[currentMode] = values;
+            }
+
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            showToast("Data Saved!");
+        }
+
+        function populateFromDatabase() {
+            const db = loadDatabase();
+            
+            if (currentMode === 'cgpa') {
+                cgpaSubjects = db.cgpa || [];
+                renderCGPAList();
+            } else {
+                const savedValues = db[currentMode] || {};
+                const config = standardConfigs[currentMode];
+                config.fields.forEach(f => {
+                    if (savedValues[f.id]) {
+                        document.getElementById(f.id).value = savedValues[f.id];
+                    }
+                });
+            }
+        }
+
+        function clearFromDatabase() {
+            const db = loadDatabase();
+            if (currentMode === 'cgpa') {
+                db.cgpa = [];
+            } else {
+                db[currentMode] = {};
+            }
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+            showToast("Data Cleared");
+        }
+
+        function showToast(msg) {
+            const x = document.getElementById("toast");
+            x.innerText = msg;
+            x.className = "show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+
+        // --- APP LOGIC ---
         function switchMode(mode) {
             currentMode = mode;
             const container = document.getElementById('calculator-body');
             container.innerHTML = '';
             document.getElementById('resultBox').style.display = 'none';
 
-            // Update Tabs UI
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.getElementById(`tab-${mode}`).classList.add('active');
 
@@ -217,9 +342,9 @@
             } else {
                 setupStandard(mode, container);
             }
+            populateFromDatabase();
         }
 
-        // --- Setup Standard Forms (Hybrid/Theory/Practical) ---
         function setupStandard(mode, container) {
             const config = standardConfigs[mode];
             document.getElementById('subtitle').innerText = config.name;
@@ -238,11 +363,8 @@
             });
         }
 
-        // --- Setup CGPA Form ---
         function setupCGPA(container) {
             document.getElementById('subtitle').innerText = "CGPA Calculator";
-            
-            // Input Row
             const inputRow = document.createElement('div');
             inputRow.className = 'cgpa-adder';
             inputRow.innerHTML = `
@@ -254,17 +376,14 @@
                 <button type="button" class="btn-add" onclick="addSubject()"><i class="fas fa-plus"></i> Add</button>
             `;
             
-            // List container
             const list = document.createElement('div');
             list.id = 'cgpaList';
             list.className = 'cgpa-list';
 
             container.appendChild(inputRow);
             container.appendChild(list);
-            renderCGPAList();
         }
 
-        // --- CGPA Specific Logic ---
         function addSubject() {
             const creditIn = document.getElementById('newCredit');
             const gradeIn = document.getElementById('newGrade');
@@ -281,11 +400,13 @@
             creditIn.value = '';
             gradeIn.value = '';
             renderCGPAList();
+            saveToDatabase();
         }
 
         function deleteSubject(index) {
             cgpaSubjects.splice(index, 1);
             renderCGPAList();
+            saveToDatabase();
         }
 
         function renderCGPAList() {
@@ -309,8 +430,8 @@
             });
         }
 
-        // --- Main Calculation Router ---
         function calculateCurrentMode() {
+            saveToDatabase();
             if (currentMode === 'cgpa') {
                 calcCGPA();
             } else {
@@ -320,6 +441,7 @@
 
         function resetCurrentMode() {
             document.getElementById('resultBox').style.display = 'none';
+            clearFromDatabase();
             if (currentMode === 'cgpa') {
                 cgpaSubjects = [];
                 renderCGPAList();
@@ -328,7 +450,6 @@
             }
         }
 
-        // --- Standard Calculation Logic ---
         function calcStandard() {
             const config = standardConfigs[currentMode];
             let total = 0;
@@ -350,20 +471,15 @@
             document.getElementById('resultBox').style.display = 'block';
         }
 
-        // --- CGPA Calculation Logic ---
         function calcCGPA() {
             if (cgpaSubjects.length === 0) return;
-
             let totalCredits = 0;
             let totalPoints = 0;
-
             cgpaSubjects.forEach(sub => {
                 totalCredits += sub.credit;
                 totalPoints += (sub.credit * gradePoints[sub.grade]);
             });
-
             const cgpa = (totalPoints / totalCredits).toFixed(2);
-
             document.getElementById('resLabel1').innerText = "Total Credits:";
             document.getElementById('weightedScore').innerText = totalCredits;
             document.getElementById('resLabel2').innerText = "Your CGPA:";
@@ -372,12 +488,10 @@
             document.getElementById('resultBox').style.display = 'block';
         }
 
-        // --- Theme Logic ---
         function toggleTheme() {
             const body = document.body;
             const icon = document.querySelector('.theme-toggle i');
             const isDark = body.getAttribute('data-theme') === 'dark';
-            
             if (isDark) {
                 body.removeAttribute('data-theme');
                 icon.classList.replace('fa-sun', 'fa-moon');
@@ -389,10 +503,8 @@
             }
         }
 
-        // Initialize
         if (localStorage.getItem('theme') === 'dark') toggleTheme();
         switchMode('hybrid');
-
     </script>
 </body>
 </html>
